@@ -1,0 +1,187 @@
+#!/usr/bin/env sh
+######################################################################
+#
+# Copyright (c) 2017 Mathieu Kerjouan <contact@steepath.eu>
+# 
+# Permission to  use, copy, modify,  and distribute this  software for
+# any purpose with or without fee is hereby granted, provided that the
+# above  copyright notice  and this  permission notice  appear in  all
+# copies.
+#
+# THE  SOFTWARE IS  PROVIDED  "AS  IS" AND  THE  AUTHOR DISCLAIMS  ALL
+# WARRANTIES  WITH  REGARD  TO  THIS SOFTWARE  INCLUDING  ALL  IMPLIED
+# WARRANTIES OF  MERCHANTABILITY AND  FITNESS. IN  NO EVENT  SHALL THE
+# AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+# DAMAGES OR ANY  DAMAGES WHATSOEVER RESULTING FROM LOSS  OF USE, DATA
+# OR PROFITS,  WHETHER IN AN  ACTION OF CONTRACT, NEGLIGENCE  OR OTHER
+# TORTIOUS ACTION,  ARISING OUT OF  OR IN  CONNECTION WITH THE  USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+#
+# -------------------------------------------------------------------
+#
+# Investigate is a small and portable script used to list and extract
+# system information in different way. This script uses simple
+# external shell libraries defining common way to execute standard
+# command on different operating systems. 
+#
+# -------------------------------------------------------------------
+#
+# supported systems:
+#
+#   OS           | status |
+#   -------------|--------|
+#   openbsd      | ok     |
+#   linux        | wip    |
+#   netbsd       | wip    |
+#   freebsd      | wip    |
+#   dragonflybsd | -      |
+#   minix        | -      |
+#
+# -------------------------------------------------------------------- 
+#   
+# Todo:
+#
+#   - support multiple OS release
+#   - support multiple format (json, yml...)
+#   - add more standard investigate functions
+#   - send mail feature
+#   - send to server feature (nc/curl/other)
+#   - for BSD, send mail to misc, dmesg or to nyc*bug
+#
+######################################################################
+
+OS_PATH="./os"
+
+######################################################################
+# function helpers
+######################################################################
+
+# standard printf wrapper
+_print() {
+  local format
+  if [ "${1}" ]
+  then
+    format="${1}"; shift
+    printf -- "${format}\n" "${*}"
+  fi
+}
+
+# <h1> html tag generator
+_print_h1() {
+  _print "<h1>%s</h1>" "${*}"
+}
+
+# <h2> html tag generator
+_print_h2() {
+  _print "<h2>%s</h2>" "${*}"
+}
+
+# <p> html tag generator
+_print_p() {
+  _print "<p>%s</p>" "${*}"
+}
+
+# <pre> html tag generator
+_print_pre() {
+  local line count
+  _print "<pre>"
+  while read line
+  do
+    printf -- "    %s\n" "${line}"
+    count=$((count+1))
+  done
+  _print "</pre>"
+}
+
+# execution wrapper, match dryrun and debug flag.
+_exec() {
+  if [ "${FLAG_DRYRUN}" ]
+  then
+    printf -- "==> will execute: %s" "${*}"
+  else
+    if [ "${FLAG_DEBUG}" ]
+    then
+      printf -- "==> %s" "${*}"
+      eval ${*}
+    else
+      eval ${*}
+    fi
+  fi
+}
+
+######################################################################
+# main functions
+######################################################################
+
+# check OS shell library path
+_flag_os() {
+  local os
+  os="${1}"
+  if [ "${os}" ]
+  then
+    if [ -f "${os}" ]
+    then
+      . "${os}"
+    else
+      printf -- "available os:\n"
+      ls "${OS_PATH}"
+      exit 1
+    fi
+  fi
+}
+
+_usage() {
+  printf -- "Usage: %s %s\n" \
+    "${0}" \
+    "[-n] [-d] [-os OS] [-out FILE] [-send MAIL]"
+  exit 1
+}
+
+# main investigate function
+_investigate() {
+  _date
+  _uname
+  _dmesg
+  _pci
+  _usb
+  _acpi
+  _netif
+  _sysctl
+  _keyboard
+}
+
+######################################################################
+# main script
+######################################################################
+
+# if no argument, we try to extract os type from uname
+if [ -z "${*}" ]
+then
+  FLAG_OS=$(uname | tr "[:upper:]" "[:lower:]")
+fi
+
+while [ "${*}" ]
+do
+  case "${1}"
+  in
+    -os) FLAG_OS="${2}"; shift; shift;;
+    -out) FLAG_OUT="${2}"; shift; shift;;
+    -send) FLAG_MAIL="${2}"; shift; shift;;
+    -n) FLAG_DRYRUN=1; shift;;
+    -d) FLAG_DEBUG=1; shift;;
+    --) break;;
+    *) _usage;;
+  esac
+done
+
+# we load functions from library
+_flag_os "${OS_PATH}/${FLAG_OS}"
+
+# finally, we execute _investigate function based on output 
+# redirection
+if [ -z "${FLAG_OUT}" ]
+then
+  _investigate 
+else
+  _investigate 2>&1 >"${FLAG_OUT}"
+fi

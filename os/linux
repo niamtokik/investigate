@@ -1,0 +1,66 @@
+#!/usr/bin/env sh
+######################################################################
+#
+# Copyright (c) 2017 Mathieu Kerjouan <contact@steepath.eu>
+#
+# Permission to  use, copy, modify,  and distribute this  software for
+# any purpose with or without fee is hereby granted, provided that the
+# above  copyright notice  and this  permission notice  appear in  all
+# copies.
+#
+# THE  SOFTWARE IS  PROVIDED  "AS  IS" AND  THE  AUTHOR DISCLAIMS  ALL
+# WARRANTIES  WITH  REGARD  TO  THIS SOFTWARE  INCLUDING  ALL  IMPLIED
+# WARRANTIES OF  MERCHANTABILITY AND  FITNESS. IN  NO EVENT  SHALL THE
+# AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+# DAMAGES OR ANY  DAMAGES WHATSOEVER RESULTING FROM LOSS  OF USE, DATA
+# OR PROFITS,  WHETHER IN AN  ACTION OF CONTRACT, NEGLIGENCE  OR OTHER
+# TORTIOUS ACTION,  ARISING OUT OF  OR IN  CONNECTION WITH THE  USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+#
+######################################################################
+
+_uname() {
+	_print_h1 "uname:"
+	_exec uname -a | _print_pre
+}
+
+_dmesg() {
+	_print_h1 "dmesg:"
+	_exec dmesg | _print_pre
+}
+
+_pci() {
+	_print_h1 "PCI devices:"
+	_exec lspci -v | _print_pre
+	_print
+}
+
+_usb() {
+	_print_h1 "USB devices:"
+	_exec lsusb -v | _print_pre
+	_print
+}
+
+_acpi() {
+	_print_h1 "ACPI support:"
+	_print
+}
+
+_netif() {
+	_print_h1 "available network interfaces:"
+	_exec ip link show | _print_pre
+	_exec ip addr show | _print_pre
+	_print
+}
+
+_sysctl() {
+	_print_h1 "system kernel variables:"
+	_exec sysctl -a | _print_pre
+	_print
+}
+
+_keyboard() {
+	_print_h1 "keyboard and mouse support:"
+	_print
+}
+
