@@ -1,0 +1,101 @@
+#!/usr/bin/env sh
+######################################################################
+#
+# Copyright (c) 2017 Mathieu Kerjouan <contact@steepath.eu>
+#
+# Permission to  use, copy, modify,  and distribute this  software for
+# any purpose with or without fee is hereby granted, provided that the
+# above  copyright notice  and this  permission notice  appear in  all
+# copies.
+#
+# THE  SOFTWARE IS  PROVIDED  "AS  IS" AND  THE  AUTHOR DISCLAIMS  ALL
+# WARRANTIES  WITH  REGARD  TO  THIS SOFTWARE  INCLUDING  ALL  IMPLIED
+# WARRANTIES OF  MERCHANTABILITY AND  FITNESS. IN  NO EVENT  SHALL THE
+# AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+# DAMAGES OR ANY  DAMAGES WHATSOEVER RESULTING FROM LOSS  OF USE, DATA
+# OR PROFITS,  WHETHER IN AN  ACTION OF CONTRACT, NEGLIGENCE  OR OTHER
+# TORTIOUS ACTION,  ARISING OUT OF  OR IN  CONNECTION WITH THE  USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+#
+######################################################################
+
+######################################################################
+# print current system date
+######################################################################
+_date() {
+  echo wip
+}
+######################################################################
+# print system release
+######################################################################
+_uname() {
+  echo wip
+}
+
+######################################################################
+# print boot message
+######################################################################
+_dmesg() {
+  echo wip
+}
+
+######################################################################
+# print pci interface information and dump
+######################################################################
+_pci() {
+  echo wip
+}
+
+######################################################################
+# print usb interface and dump
+######################################################################
+_usb() {
+  echo wip
+}
+
+######################################################################
+# print support acpi
+######################################################################
+_acpi() {
+  echo wip
+}
+
+######################################################################
+# print network interfaces
+######################################################################
+_netif() {
+  echo wip
+}
+
+######################################################################
+# print system/kernel variable
+######################################################################
+_sysctl() {
+  echo wip
+}
+
+######################################################################
+# print output devices information
+######################################################################
+_output() {
+  echo wip
+}
+
+_display() {
+  echo wip
+}
+
+######################################################################
+# print input devices information
+######################################################################
+_input() {
+  echo wip
+}
+
+_keyboard() {
+  echo wip
+}
+
+_mouse() {
+  echo wip
+}
