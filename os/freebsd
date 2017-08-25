@@ -20,35 +20,35 @@
 ######################################################################
 
 _date() {
-  echo wip
+  _exec date | _print_pre
 }
 
 _uname() {
-  echo wip
+  _exec uname -a | _print_pre
 }
 
 _dmesg() {
-  echo wip
+  _exec cat /var/run/dmesg.boot | _print_pre
 }
 
 _pci() {
-  echo wip
+  _exec pciconf -lv | _print_pre
 }
 
 _usb() {
-  echo wip
+  _exec usbconfig | _print_pre
 }
 
 _acpi() {
-  echo wip
+  _exec _apm | _print_pre
 }
 
 _netif() {
-  echo wip
+  _exec ifconfig -a | _print_pre
 }
 
 _sysctl() {
-  echo wip
+  _exec sysctl -a | _print_pre
 }
 
 _keyboard() {

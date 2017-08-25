@@ -20,23 +20,35 @@
 ######################################################################
 
 _date() {
-  echo wip
+  date | _print_pre
 }
 
 _uname() {
-  echo wip
+  uname -a | _print_pre
 }
 
 _dmesg() {
-  echo wip
+  cat /var/run/dmesg.boot | _print_pre
 }
 
 _pci() {
-  echo wip
+  local pci line
+  for pci in /dev/pci*
+  do
+    pcictl ${pci} list | while read line
+    do
+      local id bus device
+      id=$(echo ${line} | cut -d: -f0)
+      bus=$(echo ${line} | cut -d: -f1)
+      device=$(echo ${line} | cut -d: -f2)
+      echo "${line}"
+      pcictl ${pci} dump -b ${bus} -d ${device} 
+    done
+  done | _print_pre
 }
 
 _usb() {
-  echo wip
+  usbdevs -dv | _print_pre
 }
 
 _acpi() {
@@ -44,14 +56,15 @@ _acpi() {
 }
 
 _netif() {
-  echo wip
+  ifconfig -a | _print_pre
 }
 
 _sysctl() {
-  echo wip
+  sysctl -a | _print_pre
 }
 
+# see wsmuxctl, wsconscfg
 _keyboard() {
-  echo wip
+  wsconsctl -a | _print_pre
 }
 
