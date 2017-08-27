@@ -43,14 +43,10 @@
 #
 #   - support multiple OS release
 #   - support multiple format (json, yml...)
-#   - add more standard investigate functions
-#   - send mail feature
-#   - send to server feature (nc/curl/other)
-#   - for BSD, send mail to misc, dmesg or to nyc*bug
-#
+
 ######################################################################
 
-OS_PATH="./os"
+OS_PATH=$(dirname ${0})/os
 
 ######################################################################
 # function helpers
