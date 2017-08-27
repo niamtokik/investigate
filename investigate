@@ -47,6 +47,7 @@
 ######################################################################
 
 OS_PATH=$(dirname ${0})/os
+LOG_FILE="/tmp/investigate.html.log"
 
 ######################################################################
 # function helpers
@@ -129,7 +130,7 @@ _flag_os() {
 _usage() {
   printf -- "Usage: %s %s\n" \
     "${0}" \
-    "[-n] [-d] [-os OS] [-out FILE] [-send MAIL]"
+    "[-n] [-d] [-log] [-os OS] [-out FILE] [-send MAIL]"
   exit 1
 }
 
@@ -151,20 +152,15 @@ _investigate() {
 # main script
 ######################################################################
 
-# if no argument, we try to extract os type from uname
-if [ -z "${*}" ]
-then
-  FLAG_OS=$(uname | tr "[:upper:]" "[:lower:]")
-fi
 
 while [ "${*}" ]
 do
   case "${1}"
   in
-    -log) FLAG_LOG=${2}; shift; shift;;
     -os) FLAG_OS="${2}"; shift; shift;;
     -out) FLAG_OUT="${2}"; shift; shift;;
     -send) FLAG_MAIL="${2}"; shift; shift;;
+    -log) FLAG_LOG=1; shift;;
     -n) FLAG_DRYRUN=1; shift;;
     -d) FLAG_DEBUG=1; shift;;
     --) break;;
@@ -172,12 +168,21 @@ do
   esac
 done
 
-# we load functions from library
+if [ -z "${FLAG_OS}" ]
+then
+  FLAG_OS=$(uname | tr "[:upper:]" "[:lower:]")
+fi
+
 _flag_os "${OS_PATH}/${FLAG_OS}"
+
+if [ "${FLAG_MAIL}" ]
+then
+  FLAG_LOG=1
+fi
 
 if [ "${FLAG_LOG}" ]
 then
-  FLAG_OUT="/tmp/investigate.log"
+  FLAG_OUT="${LOG_FILE}"
 fi
 
 # finally, we execute _investigate function based on output 
@@ -187,4 +192,11 @@ then
   _investigate 
 else
   _investigate 2>&1 >"${FLAG_OUT}"
+fi
+
+if [ "${FLAG_MAIL}" ]
+then
+  cat "${LOG_FILE}" \
+    | mail -s "investigate output" "${FLAG_MAIL}"
+  rm "${LOG_FILE}"
 fi
