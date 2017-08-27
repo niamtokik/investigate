@@ -51,7 +51,10 @@ _sysctl() {
   _exec sysctl -a | _print_pre
 }
 
-_keyboard() {
+_output() {
   echo wip
 }
 
+_input() {
+  echo wip
+}

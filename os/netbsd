@@ -64,6 +64,14 @@ _sysctl() {
 }
 
 # see wsmuxctl, wsconscfg
+_input() {
+  _keyboard
+}
+
+_output() {
+  echo wip
+}
+
 _keyboard() {
   wsconsctl -a | _print_pre
 }

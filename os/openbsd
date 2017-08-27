@@ -59,8 +59,38 @@ _sysctl() {
 	_exec sysctl -a | _print_pre
 }
 
+######################################################################
+# print output devices information
+######################################################################
+_output() {
+  _display
+}
+
+_display() {
+  _print_h1 "display configuration:"
+  _exec wsconsctl display | _print_pre
+}
+
+######################################################################
+# print input devices information
+######################################################################
+_input() {
+  _keyboard
+  _mouse
+}
+
 _keyboard() {
-	_print_h1 "keyboard and mouse support:"
+  _print_h1 "keyboard configuration:"
+  _exec wsconsctl keyboard | _print_pre
+}
+
+_mouse() {
+  _print_h1 "mouse configuration:"
+  _exec wsconsctl mouse | _print_pre
+}
+
+_keyboard() {
+	_print_h1 "wscons configuration:"
 	_exec wsconsctl -a | _print_pre
 }
 
